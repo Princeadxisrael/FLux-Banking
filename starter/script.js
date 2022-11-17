@@ -2,7 +2,7 @@
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
-// BANKIST APP
+// FLUX BANKING APP
 
 // Data
 const account1 = {
@@ -62,15 +62,14 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 const displayTransactions = function (transactions) {
+  //emptying the containertranscations first
   containertransactions.innerHTML = ' ';
 
   //looping over the transactions
-
   transactions.forEach(function (trans, i) {
     const type = trans > 0 ? 'deposit' : 'withdrawal';
-
+    //creating an html template
     const html = `
-
     <div class="transactions__row">
       <div class="transactions__type transactions__type--${type}">
         ${i + 1} ${type}
@@ -84,26 +83,21 @@ const displayTransactions = function (transactions) {
 };
 
 displayTransactions(account1.transactions);
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
 
-// const currencies = new Map([
-//   ['USD', 'United States dollar'],
-//   ['EUR', 'Euro'],
-//   ['GBP', 'Pound sterling'],
-// ]);
-
-// const transactions = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-// /////////////////////////////////////////////////
-
-// const currencies = new Map([
-//   ['USD', 'United States dollar'],
-//   ['EUR', 'Euro'],
-//   ['GBP', 'Pound sterling'],
-// ]);
-
-// currencies.forEach(function (value, key) {
-//   console.log(`${key}: ${value}`);
-// });
+//computing the username
+//create a function that takes an arr and loops through the arr to compute the username
+const createUsername = function (accounts) {
+  accounts.forEach(function (accountArray) {
+    //compute the username in the accountsArray
+    accountArray.username = accountArray.owner
+      //converting the owner data to lowercase
+      .toLowerCase()
+      //spliting by space
+      .split(' ')
+      //map through and obtain the first letter
+      .map(letter => letter[0])
+      //join into a string
+      .join('');
+  });
+};
+createUsername(accounts);
