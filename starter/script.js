@@ -101,6 +101,15 @@ const calcdisplaySummary = function (acc) {
   labelSumInterest.textContent = `${interestSummary}`;
 };
 
+const updateUi = function (acc) {
+  //display transcations
+  displayTransactions(acc.transactions);
+  //display summary
+  calcdisplaySummary(acc);
+  //display balance
+  computeDispayBalance(acc);
+};
+
 //computing the username
 //create a function that takes an arr and loops through the arr to compute the username
 const createUsername = function (accounts) {
@@ -129,8 +138,11 @@ const computeTrans = function (accounts) {
 computeTrans(accounts);
 
 const computeDispayBalance = function (accounts) {
-  const balance = accounts.reduce((acc, trans, i, arr) => acc + trans, 0);
-  labelBalance.textContent = `${balance} EUR`;
+  accounts.balance = accounts.transactions.reduce(
+    (acc, trans, i, arr) => acc + trans,
+    0
+  );
+  labelBalance.textContent = `${accounts.balance} EUR`;
 };
 
 let currAccount;
@@ -149,15 +161,32 @@ btnLogin.addEventListener('click', function (e) {
     //clear login data fields after verification
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
-    //display transcations
-    displayTransactions(currAccount.transactions);
-    //display summary
-    calcdisplaySummary(currAccount);
-    //display balance
-    computeDispayBalance(currAccount.transactions);
+    // updateUi
+    updateUi(currAccount);
   } else {
     containerApp.style.opacity = 0;
   }
+});
+
+// implement transfer
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const recieverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  inputTransferAmount.value = inputTransferTo.value = '';
+  // implementing transfer conditions
+  if (
+    amount > 0 &&
+    recieverAcc &&
+    currAccount.balance >= amount &&
+    recieverAcc?.username !== currAccount.username
+  ) {
+    currAccount.transactions.push(-amount);
+    recieverAcc.transactions.push(amount);
+  }
+  updateUi(currAccount);
 });
 ////////////////////////////////////////////////////////
 // const testData1 = [5, 2, 4, 1, 15, 8, 3];
