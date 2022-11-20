@@ -22,6 +22,8 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
+  opacity: 100;
+  transition: all 1s;
 }
 
 .welcome {
@@ -88,7 +90,7 @@ nav {
   gap: 2rem;
 
   /* NOTE This creates the fade in/out anumation */
-  /* opacity: 0; */
+  opacity: 0;
   transition: all 1s;
 }
 

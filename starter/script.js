@@ -60,6 +60,7 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
+// const displayNavigation = document.getElementsByTagName(nav);
 
 const displayTransactions = function (transactions) {
   //emptying the containertranscations first
@@ -74,15 +75,13 @@ const displayTransactions = function (transactions) {
       <div class="transactions__type transactions__type--${type}">
         ${i + 1} ${type}
       </div>
-      <div class="transactions__value">${trans}</div>
+      <div class="transactions__value">${trans} EUR</div>
     </div>
     `;
 
     containertransactions.insertAdjacentHTML('afterbegin', html);
   });
 };
-
-displayTransactions(account1.transactions);
 
 const calcdisplaySummary = function (trans) {
   const incomes = trans
@@ -96,8 +95,6 @@ const calcdisplaySummary = function (trans) {
   // const balance= incomes+outGoing;
   // const interestSummary=
 };
-
-calcdisplaySummary(account1.transactions);
 
 //computing the username
 //create a function that takes an arr and loops through the arr to compute the username
@@ -114,6 +111,7 @@ const createUsername = function (accounts) {
       //join into a string
       .join('');
   });
+  console.log(account1.username);
 };
 createUsername(accounts);
 //seperating withdrawals and deposits
@@ -129,9 +127,28 @@ const computeDispayBalance = function (accounts) {
   const balance = accounts.reduce((acc, trans, i, arr) => acc + trans, 0);
   labelBalance.textContent = `${balance} EUR`;
 };
-computeDispayBalance(account1.transactions);
-console.log(accounts);
 
+let currAccount;
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  currAccount = accounts.find(function (acc) {
+    return acc.username === inputLoginUsername.value;
+  });
+  console.log(currAccount);
+  if (currAccount?.pin === Number(inputLoginPin.value)) {
+    //Display the UI
+    labelWelcome.textContent = `WELCOME ${currAccount.owner.split(' ')[0]}`;
+    containerApp.style.opacity = 100;
+    // displayNavigation.style.opacity = 0;
+    //display transcations
+    displayTransactions(currAccount.transactions);
+    //display summary
+    calcdisplaySummary(currAccount.transactions);
+    //display balance
+    computeDispayBalance(currAccount.transactions);
+  }
+});
 ////////////////////////////////////////////////////////
 // const testData1 = [5, 2, 4, 1, 15, 8, 3];
 // const testData2 = [16, 6, 10, 5, 6, 1, 4];
