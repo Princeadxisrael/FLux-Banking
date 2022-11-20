@@ -155,6 +155,8 @@ btnLogin.addEventListener('click', function (e) {
     calcdisplaySummary(currAccount);
     //display balance
     computeDispayBalance(currAccount.transactions);
+  } else {
+    containerApp.style.opacity = 0;
   }
 });
 ////////////////////////////////////////////////////////
