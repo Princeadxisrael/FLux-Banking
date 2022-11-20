@@ -84,6 +84,21 @@ const displayTransactions = function (transactions) {
 
 displayTransactions(account1.transactions);
 
+const calcdisplaySummary = function (trans) {
+  const incomes = trans
+    .filter(tran => tran > 0)
+    .reduce((acc, tran) => acc + tran, 0);
+  labelSumIn.textContent = `${incomes} EUR`;
+  const outGoing = trans
+    .filter(tran => tran < 0)
+    .reduce((acc, tran) => acc + tran);
+  labelSumOut.textContent = `${Math.abs(outGoing)}EUR`;
+  // const balance= incomes+outGoing;
+  // const interestSummary=
+};
+
+calcdisplaySummary(account1.transactions);
+
 //computing the username
 //create a function that takes an arr and loops through the arr to compute the username
 const createUsername = function (accounts) {
@@ -101,3 +116,40 @@ const createUsername = function (accounts) {
   });
 };
 createUsername(accounts);
+//seperating withdrawals and deposits
+const computeTrans = function (accounts) {
+  accounts.forEach(function (trans) {
+    trans.withdrawals = trans.transactions.filter(withdrawal => withdrawal < 0);
+    trans.deposits = trans.transactions.filter(deposit => deposit > 0);
+  });
+};
+computeTrans(accounts);
+
+const computeDispayBalance = function (accounts) {
+  const balance = accounts.reduce((acc, trans, i, arr) => acc + trans, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+computeDispayBalance(account1.transactions);
+console.log(accounts);
+
+////////////////////////////////////////////////////////
+// const testData1 = [5, 2, 4, 1, 15, 8, 3];
+// const testData2 = [16, 6, 10, 5, 6, 1, 4];
+// const calcAverageHumanAge = function (arr) {
+//   let humanAge;
+//   let filteredAges;
+//   let avgHumanAges;
+//   let accumu;
+//   humanAge = arr.map(Age => (Age <= 2 ? Age * 2 : 16 + Age * 4));
+//   console.log(humanAge);
+//   filteredAges = humanAge.filter(filteredAge => filteredAge >= 18);
+//   console.log(filteredAges);
+
+//   avgHumanAges = filteredAges.reduce(
+//     (acc, avgHumanAge) => acc + avgHumanAge / arr.length,
+//     0
+//   );
+//   console.log(avgHumanAges);
+// };
+// calcAverageHumanAge(testData1);
+// calcAverageHumanAge(testData2);
