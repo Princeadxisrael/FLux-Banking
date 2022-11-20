@@ -83,17 +83,22 @@ const displayTransactions = function (transactions) {
   });
 };
 
-const calcdisplaySummary = function (trans) {
-  const incomes = trans
+const calcdisplaySummary = function (acc) {
+  const incomes = acc.transactions
     .filter(tran => tran > 0)
     .reduce((acc, tran) => acc + tran, 0);
   labelSumIn.textContent = `${incomes} EUR`;
-  const outGoing = trans
+  const outGoing = acc.transactions
     .filter(tran => tran < 0)
     .reduce((acc, tran) => acc + tran);
   labelSumOut.textContent = `${Math.abs(outGoing)}EUR`;
   // const balance= incomes+outGoing;
-  // const interestSummary=
+  const interestSummary = acc.transactions
+    .filter(rate => rate > 0)
+    .map(deposit => (deposit * acc.interestRate) / 100)
+    .filter((int, i, arr) => int >= 1)
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interestSummary}`;
 };
 
 //computing the username
@@ -141,10 +146,13 @@ btnLogin.addEventListener('click', function (e) {
     labelWelcome.textContent = `WELCOME ${currAccount.owner.split(' ')[0]}`;
     containerApp.style.opacity = 100;
     // displayNavigation.style.opacity = 0;
+    //clear login data fields after verification
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
     //display transcations
     displayTransactions(currAccount.transactions);
     //display summary
-    calcdisplaySummary(currAccount.transactions);
+    calcdisplaySummary(currAccount);
     //display balance
     computeDispayBalance(currAccount.transactions);
   }
