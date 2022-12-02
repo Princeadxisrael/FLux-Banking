@@ -62,12 +62,16 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 // const displayNavigation = document.getElementsByTagName(nav);
 
-const displayTransactions = function (transactions) {
+const displayTransactions = function (transactions, sort = false) {
   //emptying the containertranscations first
   containertransactions.innerHTML = ' ';
 
+  const sortedTrans = sort
+    ? transactions.slice().sort((a, b) => a - b)
+    : transactions;
+
   //looping over the transactions
-  transactions.forEach(function (trans, i) {
+  sortedTrans.forEach(function (trans, i) {
     const type = trans > 0 ? 'deposit' : 'withdrawal';
     //creating an html template
     const html = `
@@ -188,7 +192,7 @@ btnTransfer.addEventListener('click', function (e) {
   }
   updateUi(currAccount);
 });
-
+//implement loan
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = Number(inputLoanAmount.value);
@@ -205,6 +209,7 @@ btnLoan.addEventListener('click', function (e) {
   inputLoanAmount.value = '';
 });
 
+//implement account closing
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
 
@@ -223,6 +228,17 @@ btnClose.addEventListener('click', function (e) {
   inputCloseUsername.value = inputClosePin.value = '';
 });
 console.log(accounts);
+
+//implement sort
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayTransactions(currAccount.transactions, !sorted);
+  sorted = !sorted;
+});
+
+//sorting the transanction array
+
 ////////////////////////////////////////////////////////
 const testData1 = [5, 2, 4, 1, 15, 8, 3];
 const testData2 = [16, 6, 10, 5, 6, 1, 4];
